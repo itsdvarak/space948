@@ -1,0 +1,11 @@
+config {
+ type: "declaration",
+ schema: "power",
+ name: "ICTF_PAYMENT",
+ description: "A BigQuery table acting as a data sink for comments streaming in real-time."
+}
+
+
+
+
+

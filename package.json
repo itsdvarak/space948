@@ -1,0 +1,6 @@
+{
+  "name": "construction_work948",
+  "dependencies": {
+    "@dataform/core": "2.4.2"
+  }
+}

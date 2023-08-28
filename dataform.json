@@ -1,0 +1,8 @@
+{
+  "defaultSchema": "dataform",
+  "assertionSchema": "dataform_assertions",
+  "warehouse": "bigquery",
+  "defaultDatabase": "pipelinedemo-383404",
+  "defaultLocation": "asia-south1"
+}
+    

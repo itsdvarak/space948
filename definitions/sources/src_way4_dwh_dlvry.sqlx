@@ -1,0 +1,6 @@
+config {
+ type: "declaration",
+ schema: "power",
+ name: "WAY4_DWH_DLVRY",
+ description: "A BigQuery table acting as a data sink for comments streaming in real-time."
+}

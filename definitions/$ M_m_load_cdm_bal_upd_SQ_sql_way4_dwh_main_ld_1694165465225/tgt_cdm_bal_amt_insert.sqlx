@@ -1,4 +1,4 @@
-, 
+WITH
 upd_cdm_bal_amt_insert AS (
 	SELECT
 		exp_DT_BOOKG AS DT_BOOKG,

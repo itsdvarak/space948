@@ -1,0 +1,67 @@
+
+config {
+  type: "table",
+  schema: "workspace_testing"
+  
+}
+
+
+
+
+
+with sql_reg_prcg_exp_undo AS (
+	SELECT
+		META_ID_AUDT AS META_ID_AUDT
+	FROM ${ref("ECL_REG_PRCG_BLL")}
+)
+,
+exp_input_undo3 AS (
+	SELECT
+		META_ID_AUDT AS in_META_ID_AUDT,*
+	FROM sql_reg_prcg_exp_undo
+),
+exp_input_undo1 AS (
+	SELECT
+		'UPDATE owner_bll.bll_fct' || ' SET meta_id_audt_exp = NULL' || ' , meta_dtm_ld_exp = NULL' || ' , nr_file_pcb = NULL' || ' , nr_rcrd_pcb = NULL' || ' , nm_file_phas = NULL ' || ' , cd_sts = ' || CHR(39) || 'VALID' || CHR(39) || ' WHERE meta_id_audt_exp = ' || CAST(in_META_ID_AUDT AS STRING) || ' AND dt_bookg_mnth >= TRUNC(TRUNC(SYSDATE, ' || CHR(39) || 'MM' || CHR(39) || ' ) -1, ' || CHR(39) || 'MM' || CHR(39) || ')' AS var_DN_SQL_STMT,*
+	FROM exp_input_undo3
+),
+exp_input_undo AS (
+	SELECT
+		'APP_USER_SWAN_BLL' AS exp_DN_CONNECTION,
+		var_DN_SQL_STMT AS exp_DN_SQL_STMT,*
+	FROM exp_input_undo1
+)
+,
+fil_nulls AS (
+	SELECT
+		exp_DN_CONNECTION AS DN_CONNECTION,
+		in_META_ID_AUDT AS META_ID_AUDT,
+		exp_DN_SQL_STMT AS DN_SQL_STMT
+	FROM exp_input_undo
+	WHERE in_META_ID_AUDT IS NOT NULL
+)
+,
+sql_bll_fct_undo AS (
+	SELECT
+		DN_CONNECTION AS LogicalConnectionObject,
+		DN_SQL_STMT AS DN_SQL_STMT
+	FROM fil_nulls
+)
+,
+fil_stop AS (
+	SELECT
+		'SQLError' AS in_DUMMY
+	FROM sql_bll_fct_undo
+	WHERE TRUE
+)
+,
+tct_bll_fct_undo AS (
+	SELECT
+		in_DUMMY AS DUMMY
+	FROM fil_stop
+)
+
+
+select * from fil_nulls
+
+
